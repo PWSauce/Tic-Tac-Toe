@@ -9,8 +9,6 @@ namespace Tic_Tac_Toe
                                                       { '-', '-', '-', } };
         static int player = 0;
         static char playerID;
-        static int flag = 0;
-        static int[] input;
 
         static void PrintBoard()
         {
@@ -28,7 +26,7 @@ namespace Tic_Tac_Toe
         {
             //starts game
             Console.WriteLine("Player 1 = x   Player 2 = o \n");
-            while (flag != 1 || flag != -1)
+            for (int flag = 0; !(flag == 1 || flag == -1); flag = CheckWin())
             {
                 if (player == 0)
                 {
@@ -42,23 +40,20 @@ namespace Tic_Tac_Toe
                 //takes input from the players
                 Console.WriteLine($"Choose column and then row.   Player {(player % 2) + 1} turn");
                 string[] inputstr = Console.ReadLine().Split(' ');
-                input = Array.ConvertAll(inputstr, int.Parse);
-                input[0]--;
-                input[1]--;
+                int[] input = Array.ConvertAll(inputstr, int.Parse);
+                int x = input[0] - 1;
+                int y = input[1] - 1;
 
 
                 //takes input and puts an x or o on the board
-                if (board[input[0], input[1]] == '-')
+                if (board[x, y] == '-')
                 {
-                    board[input[0], input[1]] = playerID;
+                    board[x, y] = playerID;
                 }
                 else
                 {
                     Console.WriteLine("Already taken, shame on you");
                 }
-                flag = CheckWin();
-                if (flag == 1 || flag == -1)
-                    break;
 
                 player = ++player % 2;
             }
