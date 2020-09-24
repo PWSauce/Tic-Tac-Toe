@@ -90,7 +90,7 @@ namespace Tic_Tac_Toe
                 return 1;
             else if (board[0, 1] == playerID && board[1, 1] == playerID && board[2, 1] == playerID)
                 return 1;
-            else if (player == 8)
+            else if (!board.Contains('-'))
                 return -1;
             else
                 return 0;
