@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Linq;
 
 namespace Tic_Tac_Toe
 {
@@ -7,7 +8,6 @@ namespace Tic_Tac_Toe
         static readonly char[,] board = new char[,] { { '-', '-', '-', },
                                                       { '-', '-', '-', },
                                                       { '-', '-', '-', } };
-        static int player = 0;
         static char playerID;
 
         static void PrintBoard()
@@ -26,7 +26,8 @@ namespace Tic_Tac_Toe
         {
             //starts game
             Console.WriteLine("Player 1 = x   Player 2 = o \n");
-            for (int flag = 0; !(flag == 1 || flag == -1); flag = CheckWin())
+            int flag = 0;
+            for (int player = 0; flag != 1 || flag != -1; player = (player+1) % 2)
             {
                 if (player == 0)
                 {
@@ -41,21 +42,20 @@ namespace Tic_Tac_Toe
                 Console.WriteLine($"Choose column and then row.   Player {(player % 2) + 1} turn");
                 string[] inputstr = Console.ReadLine().Split(' ');
                 int[] input = Array.ConvertAll(inputstr, int.Parse);
-                int x = input[0] - 1;
-                int y = input[1] - 1;
+                input[1]--;
+                input[0]--;
 
 
                 //takes input and puts an x or o on the board
-                if (board[x, y] == '-')
+                if (board[input[1], input[0]] == '-')
                 {
-                    board[x, y] = playerID;
+                    board[input[1], input[0]] = playerID;
                 }
                 else
                 {
                     Console.WriteLine("Already taken, shame on you");
                 }
-
-                player = ++player % 2;
+                flag = CheckWin();
             }
             if (flag == 1)
             {
@@ -70,6 +70,7 @@ namespace Tic_Tac_Toe
                 Console.WriteLine("Draw");
             }
         }
+
         static int CheckWin()
         {
             //checks win for player 2
@@ -85,7 +86,7 @@ namespace Tic_Tac_Toe
                 return 1;
             else if (board[0, 1] == playerID && board[1, 1] == playerID && board[2, 1] == playerID)
                 return 1;
-            else if (!board.Contains('-'))
+          else if (board.Cast<char>().Any(c => c == '-'))
                 return -1;
             else
                 return 0;
